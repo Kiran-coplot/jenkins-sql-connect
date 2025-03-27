@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    environment {
+        DB_USER = 'jenkins-sql'
+        DB_PASS = 'Jensql@123'
+        DB_HOST = 'localhost'
+        DB_NAME = 'jenkins_db'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Kiran-coplot/jenkins-sql-connect.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Building project..."
+            }
+        }
+        stage('Test MySQL Connection') {
+            steps {
+                sh '''
+                mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -e "SHOW DATABASES;"
+                '''
+            }
+        }
+    }
+}
